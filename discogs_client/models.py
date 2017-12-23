@@ -615,10 +615,14 @@ class CollectionFolder(PrimaryAPIObject):
     @property
     def releases(self):
         # TODO: Needs releases_url
-        return PaginatedList(self.client, self.fetch('resource_url') + '/releases', 'releases', CollectionItemInstance)
+        return PaginatedList(self.client, self.fetch('resource_url') + '/releases', 'releases', CollectionItemInstance)    
 
     def __repr__(self):
         return self.repr_str('<CollectionFolder {0!r} {1!r}>'.format(self.id, self.name))
+
+    def add(self, release):
+        release_id = release.id if isinstance(release, Release) else release
+        self.client._post(self.fetch("resource_url") + '/releases/' + release_id, {})
 
 
 class Listing(PrimaryAPIObject):
